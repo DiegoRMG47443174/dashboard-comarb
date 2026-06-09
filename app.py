@@ -12,6 +12,91 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# --- INYECCIÓN DE CSS ESTILO INTEGRAL www.ca.gob.ar ---
+st.markdown(
+    """
+    <style>
+        /* Tipografía oficial */
+        html, body, [class*="css"], .stMarkdown p {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+            color: #2D3748 !important;
+        }
+        
+        .stApp {
+            background-color: #FFFFFF !important;
+        }
+        
+        /* Barra lateral institucional */
+        [data-testid="stSidebar"] {
+            background-color: #F8FAFC !important;
+            border-right: 1px solid #E2E8F0 !important;
+        }
+        
+        /* Títulos en Azul Eléctrico (#0022c3) */
+        [data-testid="stSidebar"] h2 {
+            font-size: 1.1rem !important;
+            color: #0022c3 !important;
+            font-weight: 700 !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        /* Rediseño de Tarjetas de Métrica */
+        [data-testid="stMetricContainer"] {
+            background-color: #F8FAFC !important;
+            border: 1px solid #E2E8F0 !important;
+            border-left: 4px solid #039ee2 !important; /* Azul Predominante Comarb */
+            padding: 1rem !important;
+            border-radius: 4px !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+        }
+        
+        /* Etiquetas de KPI */
+        [data-testid="stMetricLabel"] p {
+            font-size: 0.82rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            color: #4A5568 !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Números en Azul Eléctrico (#0022c3) */
+        [data-testid="stMetricValue"] div {
+            font-size: 1.6rem !important;
+            font-weight: 700 !important;
+            color: #0022c3 !important;
+        }
+
+        /* Paneles de alerta con Contexto (Azul Predominante #039ee2) */
+        .stElementContainer div[data-testid="stNotificationV2"]:has(div[data-testid="stHeading"] + div) {
+            border-left-color: #039ee2 !important;
+        }
+
+        /* Paneles de alerta con Salmón Oficial (#ff7870) */
+        div[data-testid="stAlert"] {
+            background-color: #FFF5F5 !important;
+            border: 1px solid #FED7D7 !important;
+            border-left: 4px solid #ff7870 !important; 
+            color: #2D3748 !important;
+        }
+
+        /* Estilo para el selector de meses */
+        div[data-baseweb="select"] {
+            font-size: 0.85rem !important;
+            border: 1px solid #E2E8F0 !important;
+            border-radius: 4px !important;
+        }
+        
+        /* Línea divisoria principal en color Salmón Oficial (#ff7870) */
+        hr {
+            margin: 1.5rem 0 !important;
+            border: 0 !important;
+            border-top: 2px solid #ff7870 !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # --- 1. BASE DE DATOS CRONOLÓGICA CONSOLIDADA ---
 data_historica = {
     "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026"],
@@ -38,7 +123,7 @@ perfiles_horarios = {
 dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
 
-# --- 3. DATOS CUALITATIVOS Y DISTRIBUCIÓN DE SISTEMAS ---
+# --- 3. DATOS CUALITATIVOS Y SISTEMAS ---
 insights_mes = {
     "Octubre 2025": {
         "contexto": "Mes de mayor actividad del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
@@ -90,7 +175,7 @@ insights_mes = {
     }
 }
 
-# --- 4. INTERFAZ DE USUARIO (UI) ---
+# --- 4. UI ---
 ruta_actual = os.path.dirname(os.path.abspath(__file__))
 ruta_logo = os.path.join(ruta_actual, "comarb_logo.png")
 
@@ -103,83 +188,67 @@ with col_logo:
 
 with col_titulo:
     st.title("Dashboard Comarb - Actividad de Chatbot")
-st.markdown("Análisis dinámico del tráfico, capacidad de contención automática y focos de demanda.")
+st.markdown("Análisis dinámico del tráfico, contención y focos de demanda del chatbot de atención.")
 
-# --- 5. CONTROLADOR GLOBAL (SIDEBAR) ---
-st.sidebar.header("Filtro de Período")
-opciones_filtro = ["Total Histórico Consolidado"] + list(insights_mes.keys())
-periodo_seleccionado = st.sidebar.selectbox("Seleccionar Período a Diagnosticar:", opciones_filtro)
+# --- 5. CONTROLADOR GLOBAL ---
+periodo_seleccionado = st.sidebar.selectbox("Seleccionar Período a Diagnosticar:", ["Total Histórico Consolidado"] + list(insights_mes.keys()))
 
 st.markdown("---")
 
-# Paleta corporativa clara basada estrictamente en los tonos de Comarb
-colores_sistemas = ["#00A4E4", "#1E3A8A", "#3B82F6", "#60A5FA", "#93C5FD"]
-color_barra_principal = "#00A4E4"
+# Paleta ca.gob.ar Oficial Ajustada con #039ee2 predominante
+colores_sistemas = ["#039ee2", "#0022c3", "#1E3A8A", "#60A5FA", "#93C5FD"]
+color_barra_principal = "#039ee2"
 color_linea_conversion = "#10B981"
-color_linea_rebote = "#EF4444"
+color_linea_rebote = "#ff7870"
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
-    st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
+    st.subheader("📈 Diagnóstico macro y Evolución de demanda")
     
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
-    k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones", "Línea de base operativa")
-    k3.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%", "Estabilidad del canal")
-    k4.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%", "Eficiencia de menús")
+    k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones")
+    k3.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%")
+    k4.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%")
     
     fig_hist = go.Figure()
-    fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color=color_barra_principal))
-    fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Tasa de Conversión (%)", yaxis="y2", line=dict(color=color_linea_conversion, width=3)))
+    fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto", marker_color=color_barra_principal))
+    fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Conversión (%)", yaxis="y2", line=dict(color=color_linea_conversion, width=3)))
     fig_hist.update_layout(
-        title="Curva de crecimiento de demanda bruta y tasa de conversión a respuesta por fuera del Bot",
-        yaxis=dict(
-            title=dict(text="Volumen de Sesiones", font=dict(color="#0F172A")), 
-            tickfont=dict(color="#0F172A")
-        ),
-        yaxis2=dict(
-            title=dict(text="Tasa de Conversión (%)", font=dict(color="#0F172A")), 
-            overlaying="y", 
-            side="right", 
-            tickfont=dict(color="#0F172A")
-        ),
-        template="plotly_white", height=400, legend=dict(x=0.01, y=0.99),
-        font=dict(color="#0F172A")
+        title="Crecimiento de demanda bruta y tasa de conversión",
+        yaxis=dict(title=dict(text="Sesiones", font=dict(color="#2D3748")), tickfont=dict(color="#2D3748")),
+        yaxis2=dict(title=dict(text="Tasa de Conversión (%)", font=dict(color="#2D3748")), overlaying="y", side="right", tickfont=dict(color="#2D3748")),
+        template="plotly_white", height=400, legend=dict(x=0.01, y=0.99), font=dict(color="#2D3748")
     )
     st.plotly_chart(fig_hist, use_container_width=True)
     
     col_izq_hist, col_der_hist = st.columns(2)
-    
     with col_izq_hist:
-        st.subheader("2. Análisis del Fenómeno de Rebote Incidental")
+        st.subheader("2. Rebote Incidental (Portal)")
         df_rebote = df[df["Tasa_Rebote"] > 0]
-        fig_rebote = px.line(df_rebote, x="Mes", y="Tasa_Rebote", text="Tasa_Rebote", title="Evolución del Rebote por Saturación Externa del Portal", template="plotly_white", markers=True)
+        fig_rebote = px.line(df_rebote, x="Mes", y="Tasa_Rebote", text="Tasa_Rebote", title="Evolución del Rebote", template="plotly_white", markers=True)
         fig_rebote.update_traces(line_color=color_linea_rebote, line_width=3, textposition="top center")
-        fig_rebote.update_layout(height=350, font=dict(color="#0F172A"))
+        fig_rebote.update_layout(height=350)
         st.plotly_chart(fig_rebote, use_container_width=True)
         
     with col_der_hist:
-        st.subheader("3. Share Global de Demandas por Sistema")
+        st.subheader("3. Share de Demandas por Sistema")
         sistemas_global = {"Convenio / Padrón": 0, "SIFERE / DDJJ": 0, "SIRCREB": 0, "SIRCUPA": 0, "SIRCIP": 0}
         for m in insights_mes:
-            for sis in insights_mes[m]["sistemas"]:
-                sistemas_global[sis] += insights_mes[m]["sistemas"][sis]
-        
-        df_sis_g = pd.DataFrame(list(sistemas_global.items()), columns=["Sistema", "Volumen_Relativo"])
-        fig_pie_g = px.pie(df_sis_g, values="Volumen_Relativo", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
-        fig_pie_g.update_layout(height=350, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"))
+            for sis in insights_mes[m]["sistemas"]: sistemas_global[sis] += insights_mes[m]["sistemas"][sis]
+        df_sis_g = pd.DataFrame(list(sistemas_global.items()), columns=["Sistema", "Volumen"])
+        fig_pie_g = px.pie(df_sis_g, values="Volumen", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
+        fig_pie_g.update_layout(height=350, legend=dict(orientation="h", y=-0.1))
         st.plotly_chart(fig_pie_g, use_container_width=True)
         
     vector_horas_total = [sum(perfiles_horarios[m][i] for m in perfiles_horarios) for i in range(24)]
-    total_sesiones_historicas = df["Sesiones_Brutas"].sum()
-    vector_dias_total = [int(total_sesiones_historicas * p) for p in porcentajes_semanales]
+    vector_dias_total = [int(df["Sesiones_Brutas"].sum() * p) for p in porcentajes_semanales]
 
-# --- LÓGICA VISTA B: CORTE MENSUAL ESPECÍFICO ---
+# --- LÓGICA VISTA B: CORTE MENSUAL ---
 else:
     st.subheader(f"🔍 Diagnóstico Avanzado — Período: {periodo_seleccionado}")
-    
-    info = insights_mes[periodo_seleccionado]
     datos_mes = df[df["Mes"] == periodo_seleccionado].iloc[0]
+    info = insights_mes[periodo_seleccionado]
     
     c1, c2, c3, c4, c5, c6 = st.columns(6)
     c1.metric("Tráfico Bruto", f"{datos_mes['Sesiones_Brutas']} ses.")
@@ -189,53 +258,41 @@ else:
     c5.metric("Tasa de Conversión", f"{datos_mes['Tasa_Conversion']:.2f}%")
     c6.metric("Contención Automatizada", f"{100 - datos_mes['Tasa_Conversion']:.2f}%")
     
-    # Grid unificado de tres columnas paralelas
     col_textos, col_g_kw, col_g_pie = st.columns([2, 2, 2])
-    
     with col_textos:
         st.markdown("### 📌 Contexto de consulta")
         st.info(info["contexto"])
         st.markdown("### 🔍 Foco de Demanda")
         st.warning(info["foco"])
-        
     with col_g_kw:
-        st.markdown("### 📊 Palabras Clave Dominantes")
+        st.markdown("### 📊 Palabras Dominantes")
         df_kw = pd.DataFrame(list(info["keywords"].items()), columns=["Palabra", "Menciones"]).sort_values(by="Menciones", ascending=True)
-        # Corregido: Asignación limpia de color estructural sin trazas conflictivas externas
         fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", template="plotly_white", color_discrete_sequence=[color_barra_principal])
-        fig_kw.update_layout(showlegend=False, height=300, font=dict(color="#0F172A"), margin=dict(l=10, r=30, t=10, b=10))
+        fig_kw.update_layout(showlegend=False, height=300, margin=dict(l=10, r=30, t=10, b=10))
         st.plotly_chart(fig_kw, use_container_width=True)
-        
     with col_g_pie:
-        st.markdown("### 🍩 Distribución por Sistema")
-        df_sis_m = pd.DataFrame(list(info["sistemas"].items()), columns=["Sistema", "Distribución"])
-        df_sis_m = df_sis_m[df_sis_m["Distribución"] > 0]
-        fig_pie_m = px.pie(df_sis_m, values="Distribución", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
-        fig_pie_m.update_layout(height=300, showlegend=True, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"), margin=dict(l=10, r=10, t=10, b=10))
+        st.markdown("### 🍩 Por Sistema")
+        df_sis_m = pd.DataFrame(list(info["sistemas"].items()), columns=["Sistema", "Dist"]).query("Dist > 0")
+        fig_pie_m = px.pie(df_sis_m, values="Dist", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
+        fig_pie_m.update_layout(height=300, legend=dict(orientation="h", y=-0.1))
         st.plotly_chart(fig_pie_m, use_container_width=True)
         
     vector_horas_total = perfiles_horarios[periodo_seleccionado]
     vector_dias_total = [int(datos_mes["Sesiones_Brutas"] * p) for p in porcentajes_semanales]
 
-# --- 6. MÓDULO INTERACTIVO DE PERFIL TEMPORAL DE CONSULTAS ---
-st.sidebar.markdown("---")
+# --- 6. ANÁLISIS TEMPORAL ---
 st.markdown("### 📅 Análisis de Comportamiento y Hábitos del Contribuyente")
-
 col_graf1, col_graf2 = st.columns(2)
-
 with col_graf1:
     df_horas = pd.DataFrame({"Hora": horas_eje, "Sesiones": vector_horas_total})
-    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria de Consultas ({periodo_seleccionado})", template="plotly_white")
-    fig_horas.update_traces(line_color=color_barra_principal, fillcolor="rgba(0, 164, 228, 0.15)")
-    fig_horas.update_layout(height=350, font=dict(color="#0F172A"))
+    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria ({periodo_seleccionado})", template="plotly_white")
+    fig_horas.update_traces(line_color=color_barra_principal, fillcolor="rgba(3, 158, 226, 0.15)")
     st.plotly_chart(fig_horas, use_container_width=True)
-
 with col_graf2:
     df_dias = pd.DataFrame({"Día": dias_semana, "Sesiones": vector_dias_total})
-    fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución por Día de la Semana ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
+    fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución Semanal ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
-    fig_dias.update_layout(height=350, font=dict(color="#0F172A"))
     st.plotly_chart(fig_dias, use_container_width=True)
 
 st.markdown("---")
-st.caption("Dashboard de Monitoreo Analítico desarrollado bajo lineamientos de análisis de operaciones de canales automatizados.")
+st.caption("Dashboard de Monitoreo de la actividad del chatbot de ca.gob.ar")
