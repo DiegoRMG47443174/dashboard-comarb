@@ -102,8 +102,8 @@ with col_logo:
         st.error("Logo no encontrado.")
 
 with col_titulo:
-    st.title("Dashboard de Monitoreo: Estrés Operativo y Regularización Fiscal")
-st.markdown("Análisis dinámico del desacople de tráfico, capacidad de contención automática y focos de demanda.")
+    st.title("Dashboard Comarb - Actividad de Chatbot")
+st.markdown("Análisis dinámico del tráfico, capacidad de contención automática y focos de demanda.")
 
 # --- 5. CONTROLADOR GLOBAL (SIDEBAR) ---
 st.sidebar.header("Filtro de Período")
@@ -117,7 +117,7 @@ colores_sistemas = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"]
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
-    st.subheader("📈 Diagnóstico Macroeconómico y Evolución de Carga")
+    st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
     k1, k2, k3 = st.columns(3)
     k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
@@ -128,7 +128,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
     fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color="#2563EB"))
     fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Tasa de Conversión (%)", yaxis="y2", line=dict(color="#10B981", width=3)))
     fig_hist.update_layout(
-        title="Curva de Desacople: Crecimiento de Demanda Externa con Respuesta Estable del Bot",
+        title="Curva de crecimiento de demanda bruta y tasa de conversión a respuesta por fuera del Bot",
         yaxis=dict(title="Volumen de Sesiones"), yaxis2=dict(title="Tasa de Conversión (%)", overlaying="y", side="right"),
         template="plotly_dark", height=400, legend=dict(x=0.01, y=0.99)
     )
