@@ -122,7 +122,6 @@ color_linea_rebote = "#EF4444"
 if periodo_seleccionado == "Total Histórico Consolidado":
     st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
-    # Cuadrícula expandida a 4 columnas para integrar el Promedio Mensual dinámico
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
     k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones", "Línea de base operativa")
@@ -190,6 +189,7 @@ else:
     c5.metric("Tasa de Conversión", f"{datos_mes['Tasa_Conversion']:.2f}%")
     c6.metric("Contención Automatizada", f"{100 - datos_mes['Tasa_Conversion']:.2f}%")
     
+    # Grid unificado de tres columnas paralelas
     col_textos, col_g_kw, col_g_pie = st.columns([2, 2, 2])
     
     with col_textos:
@@ -201,9 +201,9 @@ else:
     with col_g_kw:
         st.markdown("### 📊 Palabras Clave Dominantes")
         df_kw = pd.DataFrame(list(info["keywords"].items()), columns=["Palabra", "Menciones"]).sort_values(by="Menciones", ascending=True)
-        fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", template="plotly_white")
-        fig_kw.update_traces(marker_color=color_barra_principal, textposition="outside")
-        fig_kw.update_layout(showlegend=False, height=300, font=dict(color="#0F172A"))
+        # Corregido: Asignación limpia de color estructural sin trazas conflictivas externas
+        fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", template="plotly_white", color_discrete_sequence=[color_barra_principal])
+        fig_kw.update_layout(showlegend=False, height=300, font=dict(color="#0F172A"), margin=dict(l=10, r=30, t=10, b=10))
         st.plotly_chart(fig_kw, use_container_width=True)
         
     with col_g_pie:
@@ -211,7 +211,7 @@ else:
         df_sis_m = pd.DataFrame(list(info["sistemas"].items()), columns=["Sistema", "Distribución"])
         df_sis_m = df_sis_m[df_sis_m["Distribución"] > 0]
         fig_pie_m = px.pie(df_sis_m, values="Distribución", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
-        fig_pie_m.update_layout(height=300, showlegend=True, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"))
+        fig_pie_m.update_layout(height=300, showlegend=True, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"), margin=dict(l=10, r=10, t=10, b=10))
         st.plotly_chart(fig_pie_m, use_container_width=True)
         
     vector_horas_total = perfiles_horarios[periodo_seleccionado]
@@ -235,7 +235,7 @@ with col_graf2:
     fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución por Día de la Semana ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
     fig_dias.update_layout(height=350, font=dict(color="#0F172A"))
-    st.plotly_chart(df_dias, use_container_width=True)
+    st.plotly_chart(fig_dias, use_container_width=True)
 
 st.markdown("---")
 st.caption("Dashboard de Monitoreo Analítico desarrollado bajo lineamientos de análisis de operaciones de canales automatizados.")
