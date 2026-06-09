@@ -98,8 +98,8 @@ with col_logo:
         st.error("Logo no encontrado.")
 
 with col_titulo:
-    st.title("Dashboard de Monitoreo: Estrés Operativo y Regularización Fiscal")
-st.markdown("Análisis dinámico del desacople de tráfico, capacidad de contención automática y focos de demanda.")
+    st.title("Dashboard Comarb - Actividad de Chatbot")
+st.markdown("Análisis dinámico del tráfico, capacidad de contención automática y focos de demanda.")
 
 # --- 5. CONTROLADOR GLOBAL (SIDEBAR) ---
 st.sidebar.header("Filtro de Período")
@@ -110,7 +110,7 @@ st.markdown("---")
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
-    st.subheader("📈 Diagnóstico Macroeconómico y Evolución de Carga")
+    st.subheader("📈 Diagnóstico Macro y Evolución de datos")
     
     # KPIs Generales
     k1, k2, k3 = st.columns(3)
@@ -123,7 +123,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
     fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color="#2563EB"))
     fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Tasa de Conversión (%)", yaxis="y2", line=dict(color="#10B981", width=3)))
     fig_hist.update_layout(
-        title="Curva de Desacople: Crecimiento de Demanda Externa con Respuesta Estable del Bot",
+        title="Evolución de demanda bruta y tasa de conversión a consulta por fuera del ambito del bot",
         yaxis=dict(title="Volumen de Sesiones"), yaxis2=dict(title="Tasa de Conversión (%)", overlaying="y", side="right"),
         template="plotly_dark", height=450, legend=dict(x=0.01, y=0.99)
     )
@@ -148,7 +148,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
 
 # --- LÓGICA VISTA B: CORTE MENSUAL ESPECÍFICO ---
 else:
-    st.subheader(f"🔍 Diagnóstico Operativo Avanzado — Período: {periodo_seleccionado}")
+    st.subheader(f"🔍 Diagnóstico Avanzado — Período: {periodo_seleccionado}")
     
     info = insights_mes[periodo_seleccionado]
     datos_mes = df[df["Mes"] == periodo_seleccionado].iloc[0]
@@ -165,7 +165,7 @@ else:
     # Paneles Cualitativos y Semánticos
     col_izq, col_der = st.columns(2)
     with col_izq:
-        st.markdown("### 📌 Contexto de Carga Tributaria")
+        st.markdown("### 📌 Contexto del período")
         st.info(info["contexto"])
         st.markdown("### 🔍 Foco de Demanda")
         st.warning(info["foco"])
@@ -181,7 +181,7 @@ else:
     vector_dias_total = [int(datos_mes["Sesiones_Brutas"] * p) for p in porcentajes_semanales]
 
 # --- 6. MÓDULO INTERACTIVO DE PERFIL TEMPORAL DE CONSULTAS ---
-st.markdown("### 📅 Análisis de Comportamiento y Hábitos del Contribuyente")
+st.markdown("### 📅 Análisis del comportamiento y hábitos de consulta")
 st.markdown("Evaluación de la concentración temporal para dimensionar la capacidad de respuesta y la estabilidad del canal.")
 
 col_graf1, col_graf2 = st.columns(2)
