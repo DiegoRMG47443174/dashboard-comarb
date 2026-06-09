@@ -164,7 +164,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
 
 # --- LÓGICA VISTA B: CORTE MENSUAL ESPECÍFICO ---
 else:
-    st.subheader(f"🔍 Diagnóstico Operativo Avanzado — Período: {periodo_seleccionado}")
+    st.subheader(f"🔍 Diagnóstico Avanzado — Período: {periodo_seleccionado}")
     
     info = insights_mes[periodo_seleccionado]
     datos_mes = df[df["Mes"] == periodo_seleccionado].iloc[0]
@@ -181,7 +181,7 @@ else:
     col_textos, col_g_kw, col_g_pie = st.columns([2, 2, 2])
     
     with col_textos:
-        st.markdown("### 📌 Contexto de Carga Tributaria")
+        st.markdown("### 📌 Contexto de consulta")
         st.info(info["contexto"])
         st.markdown("### 🔍 Foco de Demanda")
         st.warning(info["foco"])
