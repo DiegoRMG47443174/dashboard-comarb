@@ -41,7 +41,7 @@ porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
 # --- 3. DATOS CUALITATIVOS Y DISTRIBUCIÓN DE SISTEMAS ---
 insights_mes = {
     "Octubre 2025": {
-        "contexto": "Mes de mayor activity del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
+        "contexto": "Mes de mayor actividad del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
         "foco": "Consultas de rutina sobre el uso del chatbot e interacciones bajo niveles normales de operación corporativa.",
         "keywords": {"Convenio": 100, "Sesiones": 85, "Consulta": 60},
         "sistemas": {"Convenio / Padrón": 50, "SIFERE / DDJJ": 30, "SIRCREB": 12, "SIRCUPA": 8, "SIRCIP": 0}
@@ -122,10 +122,12 @@ color_linea_rebote = "#EF4444"
 if periodo_seleccionado == "Total Histórico Consolidado":
     st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
-    k1, k2, k3 = st.columns(3)
+    # Cuadrícula expandida a 4 columnas para integrar el Promedio Mensual dinámico
+    k1, k2, k3, k4 = st.columns(4)
     k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
-    k2.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%", "Estabilidad del canal")
-    k3.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%", "Eficiencia de menús")
+    k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones", "Línea de base operativa")
+    k3.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%", "Estabilidad del canal")
+    k4.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%", "Eficiencia de menús")
     
     fig_hist = go.Figure()
     fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color=color_barra_principal))
@@ -233,7 +235,7 @@ with col_graf2:
     fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución por Día de la Semana ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
     fig_dias.update_layout(height=350, font=dict(color="#0F172A"))
-    st.plotly_chart(fig_dias, use_container_width=True)
+    st.plotly_chart(df_dias, use_container_width=True)
 
 st.markdown("---")
 st.caption("Dashboard de Monitoreo Analítico desarrollado bajo lineamientos de análisis de operaciones de canales automatizados.")
