@@ -41,7 +41,7 @@ porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
 # --- 3. DATOS CUALITATIVOS Y DISTRIBUCIÓN DE SISTEMAS ---
 insights_mes = {
     "Octubre 2025": {
-        "contexto": "Mes de mayor actividad del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
+        "contexto": "Mes de mayor activity del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
         "foco": "Consultas de rutina sobre el uso del chatbot e interacciones bajo niveles normales de operación corporativa.",
         "keywords": {"Convenio": 100, "Sesiones": 85, "Consulta": 60},
         "sistemas": {"Convenio / Padrón": 50, "SIFERE / DDJJ": 30, "SIRCREB": 12, "SIRCUPA": 8, "SIRCIP": 0}
@@ -112,8 +112,11 @@ periodo_seleccionado = st.sidebar.selectbox("Seleccionar Período a Diagnosticar
 
 st.markdown("---")
 
-# Paleta corporativa moderna de azules/celestes
-colores_sistemas = ["#1E3A8A", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD"]
+# Paleta corporativa clara basada estrictamente en los tonos de Comarb
+colores_sistemas = ["#00A4E4", "#1E3A8A", "#3B82F6", "#60A5FA", "#93C5FD"]
+color_barra_principal = "#00A4E4"
+color_linea_conversion = "#10B981"
+color_linea_rebote = "#EF4444"
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
@@ -125,37 +128,45 @@ if periodo_seleccionado == "Total Histórico Consolidado":
     k3.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%", "Eficiencia de menús")
     
     fig_hist = go.Figure()
-    fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color="#2563EB"))
-    fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Tasa de Conversión (%)", yaxis="y2", line=dict(color="#10B981", width=3)))
+    fig_hist.add_trace(go.Bar(x=df["Mes"], y=df["Sesiones_Brutas"], name="Tráfico Bruto (Sesiones)", marker_color=color_barra_principal))
+    fig_hist.add_trace(go.Scatter(x=df["Mes"], y=df["Tasa_Conversion"], name="Tasa de Conversión (%)", yaxis="y2", line=dict(color=color_linea_conversion, width=3)))
     fig_hist.update_layout(
         title="Curva de crecimiento de demanda bruta y tasa de conversión a respuesta por fuera del Bot",
-        yaxis=dict(title="Volumen de Sesiones"), yaxis2=dict(title="Tasa de Conversión (%)", overlaying="y", side="right"),
-        template="plotly_dark", height=400, legend=dict(x=0.01, y=0.99)
+        yaxis=dict(
+            title=dict(text="Volumen de Sesiones", font=dict(color="#0F172A")), 
+            tickfont=dict(color="#0F172A")
+        ),
+        yaxis2=dict(
+            title=dict(text="Tasa de Conversión (%)", font=dict(color="#0F172A")), 
+            overlaying="y", 
+            side="right", 
+            tickfont=dict(color="#0F172A")
+        ),
+        template="plotly_white", height=400, legend=dict(x=0.01, y=0.99),
+        font=dict(color="#0F172A")
     )
     st.plotly_chart(fig_hist, use_container_width=True)
     
-    # Fila secundaria: Rebote Técnico + Gráfico de Dona de Sistemas Consolidado
     col_izq_hist, col_der_hist = st.columns(2)
     
     with col_izq_hist:
         st.subheader("2. Análisis del Fenómeno de Rebote Incidental")
         df_rebote = df[df["Tasa_Rebote"] > 0]
-        fig_rebote = px.line(df_rebote, x="Mes", y="Tasa_Rebote", text="Tasa_Rebote", title="Evolución del Rebote por Saturación Externa del Portal", template="plotly_dark", markers=True)
-        fig_rebote.update_traces(line_color="#EF4444", line_width=3, textposition="top center")
-        fig_rebote.update_layout(height=350)
+        fig_rebote = px.line(df_rebote, x="Mes", y="Tasa_Rebote", text="Tasa_Rebote", title="Evolución del Rebote por Saturación Externa del Portal", template="plotly_white", markers=True)
+        fig_rebote.update_traces(line_color=color_linea_rebote, line_width=3, textposition="top center")
+        fig_rebote.update_layout(height=350, font=dict(color="#0F172A"))
         st.plotly_chart(fig_rebote, use_container_width=True)
         
     with col_der_hist:
         st.subheader("3. Share Global de Demandas por Sistema")
-        # Consolidación matemática de los sistemas de todos los meses
         sistemas_global = {"Convenio / Padrón": 0, "SIFERE / DDJJ": 0, "SIRCREB": 0, "SIRCUPA": 0, "SIRCIP": 0}
         for m in insights_mes:
             for sis in insights_mes[m]["sistemas"]:
                 sistemas_global[sis] += insights_mes[m]["sistemas"][sis]
         
         df_sis_g = pd.DataFrame(list(sistemas_global.items()), columns=["Sistema", "Volumen_Relativo"])
-        fig_pie_g = px.pie(df_sis_g, values="Volumen_Relativo", names="Sistema", hole=0.4, template="plotly_dark", color_discrete_sequence=colores_sistemas)
-        fig_pie_g.update_layout(height=350, legend=dict(orientation="h", y=-0.1))
+        fig_pie_g = px.pie(df_sis_g, values="Volumen_Relativo", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
+        fig_pie_g.update_layout(height=350, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"))
         st.plotly_chart(fig_pie_g, use_container_width=True)
         
     vector_horas_total = [sum(perfiles_horarios[m][i] for m in perfiles_horarios) for i in range(24)]
@@ -177,7 +188,6 @@ else:
     c5.metric("Tasa de Conversión", f"{datos_mes['Tasa_Conversion']:.2f}%")
     c6.metric("Contención Automatizada", f"{100 - datos_mes['Tasa_Conversion']:.2f}%")
     
-    # Diseño en 3 columnas paralelas: Textos, Keywords (Barras) y Sistemas (Dona)
     col_textos, col_g_kw, col_g_pie = st.columns([2, 2, 2])
     
     with col_textos:
@@ -189,39 +199,40 @@ else:
     with col_g_kw:
         st.markdown("### 📊 Palabras Clave Dominantes")
         df_kw = pd.DataFrame(list(info["keywords"].items()), columns=["Palabra", "Menciones"]).sort_values(by="Menciones", ascending=True)
-        fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", color="Menciones", color_continuous_scale="Blues", template="plotly_dark")
-        fig_kw.update_layout(showlegend=False, coloraxis_showscale=False, height=300)
+        fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", template="plotly_white")
+        fig_kw.update_traces(marker_color=color_barra_principal, textposition="outside")
+        fig_kw.update_layout(showlegend=False, height=300, font=dict(color="#0F172A"))
         st.plotly_chart(fig_kw, use_container_width=True)
         
     with col_g_pie:
         st.markdown("### 🍩 Distribución por Sistema")
         df_sis_m = pd.DataFrame(list(info["sistemas"].items()), columns=["Sistema", "Distribución"])
-        # Filtramos sistemas en 0% para que quede limpio el gráfico del mes
         df_sis_m = df_sis_m[df_sis_m["Distribución"] > 0]
-        fig_pie_m = px.pie(df_sis_m, values="Distribución", names="Sistema", hole=0.4, template="plotly_dark", color_discrete_sequence=colores_sistemas)
-        fig_pie_m.update_layout(height=300, showlegend=True, legend=dict(orientation="h", y=-0.1))
+        fig_pie_m = px.pie(df_sis_m, values="Distribución", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
+        fig_pie_m.update_layout(height=300, showlegend=True, legend=dict(orientation="h", y=-0.1), font=dict(color="#0F172A"))
         st.plotly_chart(fig_pie_m, use_container_width=True)
         
     vector_horas_total = perfiles_horarios[periodo_seleccionado]
     vector_dias_total = [int(datos_mes["Sesiones_Brutas"] * p) for p in porcentajes_semanales]
 
 # --- 6. MÓDULO INTERACTIVO DE PERFIL TEMPORAL DE CONSULTAS ---
+st.sidebar.markdown("---")
 st.markdown("### 📅 Análisis de Comportamiento y Hábitos del Contribuyente")
 
 col_graf1, col_graf2 = st.columns(2)
 
 with col_graf1:
     df_horas = pd.DataFrame({"Hora": horas_eje, "Sesiones": vector_horas_total})
-    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria de Consultas ({periodo_seleccionado})", template="plotly_dark")
-    fig_horas.update_traces(line_color="#2563EB", fillcolor="rgba(37, 99, 235, 0.2)")
-    fig_horas.update_layout(height=350)
+    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria de Consultas ({periodo_seleccionado})", template="plotly_white")
+    fig_horas.update_traces(line_color=color_barra_principal, fillcolor="rgba(0, 164, 228, 0.15)")
+    fig_horas.update_layout(height=350, font=dict(color="#0F172A"))
     st.plotly_chart(fig_horas, use_container_width=True)
 
 with col_graf2:
     df_dias = pd.DataFrame({"Día": dias_semana, "Sesiones": vector_dias_total})
-    fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución por Día de la Semana ({periodo_seleccionado})", text="Sesiones", template="plotly_dark")
+    fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución por Día de la Semana ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
-    fig_dias.update_layout(height=350)
+    fig_dias.update_layout(height=350, font=dict(color="#0F172A"))
     st.plotly_chart(fig_dias, use_container_width=True)
 
 st.markdown("---")
