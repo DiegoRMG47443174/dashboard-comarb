@@ -157,7 +157,7 @@ insights_mes = {
     },
     "Marzo 2026": {
         "contexto": "Explosión masiva de demanda impulsada por el calendario de vencimientos generales del Convenio Multilateral.",
-        "foco": "Consultas complejas sobre reglas de atribución, jurisdicciones de alta y regímenes de recaudación. Disminución drástica de problemas de estabilidad técnica en sistemas.",
+        "foco": "Consultas complexes sobre reglas de atribución, jurisdicciones de alta y regímenes de recaudación. Disminución drástica de problemas de estabilidad técnica en sistemas.",
         "keywords": {"Convenio": 100, "DDJJ": 88, "Baja": 78, "Multilateral": 72, "Alta": 65, "Ingresos": 58},
         "sistemas": {"Convenio / Padrón": 65, "SIFERE / DDJJ": 20, "SIRCREB": 10, "SIRCUPA": 5, "SIRCIP": 0}
     },
@@ -188,22 +188,22 @@ with col_logo:
 
 with col_titulo:
     st.title("Dashboard Comarb - Actividad de Chatbot")
-st.markdown("Análisis dinámico del tráfico, contención y focos de demanda del chatbot de atención.")
+st.markdown("Análisis dinámico del tráfico, contención y focos de demanda bajo lineamientos institucionales.")
 
 # --- 5. CONTROLADOR GLOBAL ---
 periodo_seleccionado = st.sidebar.selectbox("Seleccionar Período a Diagnosticar:", ["Total Histórico Consolidado"] + list(insights_mes.keys()))
 
 st.markdown("---")
 
-# Paleta ca.gob.ar Oficial Ajustada con #039ee2 predominante
+# Paleta ca.gob.ar Oficial definitiva
 colores_sistemas = ["#039ee2", "#0022c3", "#1E3A8A", "#60A5FA", "#93C5FD"]
 color_barra_principal = "#039ee2"
-color_linea_conversion = "#10B981"
-color_linea_rebote = "#ff7870"
+color_linea_conversion = "#ff7870" # <-- Modificado a Salmón Oficial
+color_linea_rebote = "#0022c3"     # <-- Modificado a Azul Eléctrico para contrastar
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
-    st.subheader("📈 Diagnóstico macro y Evolución de demanda")
+    st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
@@ -295,4 +295,4 @@ with col_graf2:
     st.plotly_chart(fig_dias, use_container_width=True)
 
 st.markdown("---")
-st.caption("Dashboard de Monitoreo de la actividad del chatbot de ca.gob.ar")
+st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
