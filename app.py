@@ -99,12 +99,12 @@ st.markdown(
 
 # --- 1. BASE DE DATOS CRONOLÓGICA CONSOLIDADA ---
 data_historica = {
-    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026"],
-    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999],
-    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69],
-    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164],
-    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71],
-    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556]
+    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026"],
+    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299],
+    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.69],
+    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334],
+    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95],
+    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598]
 }
 df = pd.DataFrame(data_historica)
 
@@ -118,7 +118,8 @@ perfiles_horarios = {
     "Febrero 2026": [51,43,40,29,20,14,8,5,8,13,43,126,224,263,327,252,195,238,236,182,171,99,100,87],
     "Marzo 2026": [92,74,44,30,26,7,4,5,4,14,50,230,415,466,517,413,307,359,366,341,254,150,151,97],
     "Abril 2026": [94,55,59,39,24,9,7,10,6,23,59,257,440,553,537,471,350,433,452,378,299,178,141,112],
-    "Mayo 2026": [99,63,70,44,23,21,9,3,9,27,51,253,421,535,573,467,339,410,470,379,262,172,176,123]
+    "Mayo 2026": [99,63,70,44,23,21,9,3,9,27,51,253,421,535,573,467,339,410,470,379,262,172,176,123],
+    "Junio 2026": [100, 80, 65, 37, 20, 10, 10, 20, 139, 207, 261, 292, 492, 587, 558, 523, 414, 402, 362, 290, 250, 210, 185, 140]
 }
 dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
@@ -157,7 +158,7 @@ insights_mes = {
     },
     "Marzo 2026": {
         "contexto": "Explosión masiva de demanda impulsada por el calendario de vencimientos generales del Convenio Multilateral.",
-        "foco": "Consultas complexes sobre reglas de atribución, jurisdicciones de alta y regímenes de recaudación. Disminución drástica de problemas de estabilidad técnica en sistemas.",
+        "foco": "Consultas complejas sobre reglas de atribución, jurisdicciones de alta y regímenes de recaudación. Disminución drástica de problemas de estabilidad técnica en sistemas.",
         "keywords": {"Convenio": 100, "DDJJ": 88, "Baja": 78, "Multilateral": 72, "Alta": 65, "Ingresos": 58},
         "sistemas": {"Convenio / Padrón": 65, "SIFERE / DDJJ": 20, "SIRCREB": 10, "SIRCUPA": 5, "SIRCIP": 0}
     },
@@ -172,6 +173,12 @@ insights_mes = {
         "foco": "Persistencia de dudas operativas en DDJJ e irrupción crítica del nuevo régimen local SIRCIP (tarjetas y medios de pago electrónicos), conviviendo directamente con las consultas de SIRCREB.",
         "keywords": {"DDJJ": 100, "Baja": 95, "Convenio": 90, "Alta": 85, "Sircip": 75, "Sircreb": 68},
         "sistemas": {"Convenio / Padrón": 30, "SIFERE / DDJJ": 30, "SIRCREB": 15, "SIRCUPA": 10, "SIRCIP": 15}
+    },
+    "Junio 2026": {
+        "contexto": "Cierre del primer semestre del año rompiendo la marca de mayo y estableciendo el récord histórico de tráfico con 5.299 sesiones brutas.",
+        "foco": "Retorno masivo de urgencias por liquidación de obligaciones anuales (Declaraciones Juradas), combinadas con trámites padronales y los regímenes de retención bancaria.",
+        "keywords": {"DDJJ": 100, "Baja": 82, "Convenio": 75, "Ingresos": 68, "Retenciones": 60, "Sistema": 55},
+        "sistemas": {"Convenio / Padrón": 38, "SIFERE / DDJJ": 35, "SIRCREB": 15, "SIRCUPA": 5, "SIRCIP": 7}
     }
 }
 
@@ -198,15 +205,15 @@ st.markdown("---")
 # Paleta ca.gob.ar Oficial definitiva
 colores_sistemas = ["#039ee2", "#0022c3", "#1E3A8A", "#60A5FA", "#93C5FD"]
 color_barra_principal = "#039ee2"
-color_linea_conversion = "#ff7870" # <-- Modificado a Salmón Oficial
-color_linea_rebote = "#0022c3"     # <-- Modificado a Azul Eléctrico para contrastar
+color_linea_conversion = "#ff7870"
+color_linea_rebote = "#0022c3"
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
     st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Pico Máximo Registrado", "4.999 Sesiones", "Mayo 2026")
+    k1.metric("Pico Máximo Registrado", f"{df['Sesiones_Brutas'].max():.0f} Sesiones", "Junio 2026")
     k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones")
     k3.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%")
     k4.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%")
@@ -294,5 +301,7 @@ with col_graf2:
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
     st.plotly_chart(fig_dias, use_container_width=True)
 
+st.markdown("---")
+st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
 st.markdown("---")
 st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
