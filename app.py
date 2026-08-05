@@ -44,7 +44,7 @@ st.markdown(
         [data-testid="stMetricContainer"] {
             background-color: #F8FAFC !important;
             border: 1px solid #E2E8F0 !important;
-            border-left: 4px solid #039ee2 !important; /* Azul Predominante Comarb */
+            border-left: 4px solid #039ee2 !important; 
             padding: 1rem !important;
             border-radius: 4px !important;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
@@ -66,7 +66,7 @@ st.markdown(
             color: #0022c3 !important;
         }
 
-        /* Paneles de alerta con Contexto (Azul Predominante #039ee2) */
+        /* Paneles de alerta con Contexto */
         .stElementContainer div[data-testid="stNotificationV2"]:has(div[data-testid="stHeading"] + div) {
             border-left-color: #039ee2 !important;
         }
@@ -86,7 +86,7 @@ st.markdown(
             border-radius: 4px !important;
         }
         
-        /* Línea divisoria principal en color Salmón Oficial (#ff7870) */
+        /* Línea divisoria principal en color Salmón Oficial */
         hr {
             margin: 1.5rem 0 !important;
             border: 0 !important;
@@ -99,12 +99,12 @@ st.markdown(
 
 # --- 1. BASE DE DATOS CRONOLÓGICA CONSOLIDADA ---
 data_historica = {
-    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026"],
-    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299],
-    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.69],
-    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334],
-    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95],
-    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598]
+    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026", "Julio 2026"],
+    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299, 4043],
+    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.62, 26.11],
+    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334, 1796],
+    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95, 55.58],
+    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598, 469]
 }
 df = pd.DataFrame(data_historica)
 
@@ -119,7 +119,8 @@ perfiles_horarios = {
     "Marzo 2026": [92,74,44,30,26,7,4,5,4,14,50,230,415,466,517,413,307,359,366,341,254,150,151,97],
     "Abril 2026": [94,55,59,39,24,9,7,10,6,23,59,257,440,553,537,471,350,433,452,378,299,178,141,112],
     "Mayo 2026": [99,63,70,44,23,21,9,3,9,27,51,253,421,535,573,467,339,410,470,379,262,172,176,123],
-    "Junio 2026": [100, 80, 65, 37, 20, 10, 10, 20, 139, 207, 261, 292, 492, 587, 558, 523, 414, 402, 362, 290, 250, 210, 185, 140]
+    "Junio 2026": [80, 69, 65, 37, 20, 10, 10, 3, 3, 20, 68, 261, 492, 587, 558, 523, 362, 402, 493, 414, 292, 207, 180, 139],
+    "Julio 2026": [70, 60, 45, 41, 15, 12, 12, 6, 8, 21, 42, 192, 374, 451, 485, 401, 311, 319, 329, 261, 213, 148, 117, 110]
 }
 dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
@@ -175,10 +176,16 @@ insights_mes = {
         "sistemas": {"Convenio / Padrón": 30, "SIFERE / DDJJ": 30, "SIRCREB": 15, "SIRCUPA": 10, "SIRCIP": 15}
     },
     "Junio 2026": {
-        "contexto": "Cierre del primer semestre del año rompiendo la marca de mayo y estableciendo el récord histórico de tráfico con 5.299 sesiones brutas.",
-        "foco": "Retorno masivo de urgencias por liquidación de obligaciones anuales (Declaraciones Juradas), combinadas con trámites padronales y los regímenes de retención bancaria.",
-        "keywords": {"DDJJ": 100, "Baja": 82, "Convenio": 75, "Ingresos": 68, "Retenciones": 60, "Sistema": 55},
-        "sistemas": {"Convenio / Padrón": 38, "SIFERE / DDJJ": 35, "SIRCREB": 15, "SIRCUPA": 5, "SIRCIP": 7}
+        "contexto": "Cierre del primer semestre consolidando el pico histórico de demanda del canal con casi 5.300 sesiones brutas ingresadas.",
+        "foco": "Urgencia de liquidación de obligaciones anuales combinada con los trámites de rutina fiscal, dominando las consultas sobre DDJJ, ingresos y presentaciones.",
+        "keywords": {"DDJJ": 100, "Baja": 85, "Convenio": 75, "Ingresos": 65, "Retenciones": 50},
+        "sistemas": {"Convenio / Padrón": 35, "SIFERE / DDJJ": 45, "SIRCREB": 15, "SIRCUPA": 3, "SIRCIP": 2}
+    },
+    "Julio 2026": {
+        "contexto": "Disminución del tráfico tras los picos estacionales de vencimientos. Recientes interacciones del sistema muestran pruebas de QA activas para el SUMA BOT.",
+        "foco": "Identificación de CUIT y validación de registros dentro del padrón federal, observándose un peso relativo alto en consultas sobre retenciones bancarias.",
+        "keywords": {"Sifere": 100, "Sircreb": 85, "Padrón": 70, "CUIT": 55},
+        "sistemas": {"Convenio / Padrón": 19, "SIFERE / DDJJ": 36, "SIRCREB": 25, "SIRCUPA": 17, "SIRCIP": 3}
     }
 }
 
@@ -213,7 +220,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
     st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
     
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Pico Máximo Registrado", f"{df['Sesiones_Brutas'].max():.0f} Sesiones", "Junio 2026")
+    k1.metric("Pico Máximo Registrado", f"{df['Sesiones_Brutas'].max():.0f} Sesiones")
     k2.metric("Promedio Mensual", f"{df['Sesiones_Brutas'].mean():.0f} Sesiones")
     k3.metric("Tasa de Conversión Promedio", f"{df['Tasa_Conversion'].mean():.2f}%")
     k4.metric("Contención Automatizada Promedio", f"{100 - df['Tasa_Conversion'].mean():.2f}%")
@@ -301,7 +308,5 @@ with col_graf2:
     fig_dias.update_traces(marker_color="#10B981", textposition="outside")
     st.plotly_chart(fig_dias, use_container_width=True)
 
-st.markdown("---")
-st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
 st.markdown("---")
 st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
