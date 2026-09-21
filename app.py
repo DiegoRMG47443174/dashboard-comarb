@@ -99,12 +99,12 @@ st.markdown(
 
 # --- 1. BASE DE DATOS CRONOLÓGICA CONSOLIDADA ---
 data_historica = {
-    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026", "Julio 2026"],
-    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299, 4043],
-    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.62, 26.11],
-    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334, 1796],
-    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95, 55.58],
-    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598, 469]
+    "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026", "Julio 2026", "Agosto 2026"],
+    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299, 4043, 4247],
+    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.62, 26.11, 23.43],
+    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334, 1796, 1818],
+    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95, 55.58, 57.19],
+    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598, 469, 426]
 }
 df = pd.DataFrame(data_historica)
 
@@ -120,7 +120,8 @@ perfiles_horarios = {
     "Abril 2026": [94,55,59,39,24,9,7,10,6,23,59,257,440,553,537,471,350,433,452,378,299,178,141,112],
     "Mayo 2026": [99,63,70,44,23,21,9,3,9,27,51,253,421,535,573,467,339,410,470,379,262,172,176,123],
     "Junio 2026": [80, 69, 65, 37, 20, 10, 10, 3, 3, 20, 68, 261, 492, 587, 558, 523, 362, 402, 493, 414, 292, 207, 180, 139],
-    "Julio 2026": [70, 60, 45, 41, 15, 12, 12, 6, 8, 21, 42, 192, 374, 451, 485, 401, 311, 319, 329, 261, 213, 148, 117, 110]
+    "Julio 2026": [70, 60, 45, 41, 15, 12, 12, 6, 8, 21, 42, 192, 374, 451, 485, 401, 311, 319, 329, 261, 213, 148, 117, 110],
+    "Agosto 2026": [91, 66, 46, 33, 26, 12, 10, 6, 7, 14, 44, 211, 414, 447, 499, 367, 279, 363, 360, 312, 243, 157, 129, 111]
 }
 dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
@@ -186,6 +187,12 @@ insights_mes = {
         "foco": "Identificación de CUIT y validación de registros dentro del padrón federal, observándose un peso relativo alto en consultas sobre retenciones bancarias.",
         "keywords": {"Sifere": 100, "Sircreb": 85, "Padrón": 70, "CUIT": 55},
         "sistemas": {"Convenio / Padrón": 19, "SIFERE / DDJJ": 36, "SIRCREB": 25, "SIRCUPA": 17, "SIRCIP": 3}
+    },
+    "Agosto 2026": {
+        "contexto": "Recuperación leve del volumen bruto post-ferias de julio (4.247 sesiones). Se logró la tasa de contención automatizada más eficiente del semestre, alcanzando el 76,57%.",
+        "foco": "Prevalencia equilibrada entre los trámites de DDJJ en SIFERE y retenciones de SIRCREB, acompañados de un volumen masivo de gestión de Padrón (altas y bajas de contribuyentes).",
+        "keywords": {"Baja": 100, "Convenio": 90, "DDJJ": 85, "Alta": 80, "Sircreb": 75, "Retenciones": 70},
+        "sistemas": {"Convenio / Padrón": 24, "SIFERE / DDJJ": 31, "SIRCREB": 28, "SIRCUPA": 10, "SIRCIP": 7}
     }
 }
 
