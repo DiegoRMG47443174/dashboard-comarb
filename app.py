@@ -100,34 +100,44 @@ st.markdown(
 # --- 1. BASE DE DATOS CRONOLÓGICA CONSOLIDADA ---
 data_historica = {
     "Mes": ["Octubre 2025", "Noviembre 2025", "Diciembre 2025", "Enero 2026", "Febrero 2026", "Marzo 2026", "Abril 2026", "Mayo 2026", "Junio 2026", "Julio 2026", "Agosto 2026", "Septiembre 2026"],
-    "Sesiones_Brutas": [2805, 2593, 1885, 2485, 2774, 4416, 4986, 4999, 5299, 4043, 4247, 4122],
-    "Tasa_Conversion": [21.00, 21.00, 23.61, 24.62, 24.73, 25.27, 26.58, 25.69, 25.62, 26.11, 23.43, 23.63],
-    "Usuarios_Interactivos": [2805, 2593, 1885, 2485, 2774, 2493, 2137, 2164, 2334, 1796, 1818, 1807],
-    "Tasa_Rebote": [0.00, 0.00, 0.00, 0.00, 0.00, 43.50, 57.14, 56.71, 55.95, 55.58, 57.19, 56.16],
-    "Consultas_Escritas": [589, 544, 445, 612, 686, 630, 568, 556, 598, 469, 426, 427]
+    "Sesiones_Brutas": [2808, 2595, 1885, 2485, 2774, 4416, 4986, 4999, 5299, 4043, 4247, 4122],
+    "Tasa_Conversion": [19.42, 24.82, 24.79, 25.84, 26.43, 25.27, 26.58, 25.69, 25.62, 26.11, 23.43, 23.63],
+    "Usuarios_Interactivos": [2673, 2498, 1795, 2368, 2596, 2493, 2137, 2164, 2334, 1796, 1818, 1807],
+    "Tasa_Rebote": [4.81, 3.74, 4.77, 4.71, 6.42, 43.55, 57.14, 56.71, 55.95, 55.58, 57.19, 56.16],
+    "Consultas_Escritas": [519, 620, 445, 612, 686, 630, 568, 556, 598, 469, 426, 427]
 }
 df = pd.DataFrame(data_historica)
 
-# --- 2. PERFILES DE DISTRIBUCIÓN TEMPORAL ---
+# --- 2. PERFILES DE DISTRIBUCIÓN TEMPORAL (UTC) ---
 horas_eje = [f"{h:02d}:00" for h in range(24)]
 perfiles_horarios = {
-    "Octubre 2025": [20,15,10,5,5,2,2,3,5,15,45,90,180,210,195,150,140,160,155,120,90,70,60,40],
-    "Noviembre 2025": [18,12,8,4,4,2,2,3,6,12,40,85,170,195,180,145,135,150,140,110,85,65,55,35],
-    "Diciembre 2025": [40,38,27,16,12,9,7,5,3,15,36,75,147,205,218,181,145,136,146,119,89,84,72,57],
-    "Enero 2026": [60,45,38,23,20,12,11,8,6,9,28,106,192,252,245,226,191,213,212,150,150,118,95,75],
-    "Febrero 2026": [51,43,40,29,20,14,8,5,8,13,43,126,224,263,327,252,195,238,236,182,171,99,100,87],
-    "Marzo 2026": [92,74,44,30,26,7,4,5,4,14,50,230,415,466,517,413,307,359,366,341,254,150,151,97],
-    "Abril 2026": [94,55,59,39,24,9,7,10,6,23,59,257,440,553,537,471,350,433,452,378,299,178,141,112],
-    "Mayo 2026": [99,63,70,44,23,21,9,3,9,27,51,253,421,535,573,467,339,410,470,379,262,172,176,123],
-    "Junio 2026": [80, 69, 65, 37, 20, 10, 10, 3, 3, 20, 68, 261, 492, 587, 558, 523, 362, 402, 493, 414, 292, 207, 180, 139],
+    "Octubre 2025": [76, 53, 65, 39, 21, 10, 15, 12, 13, 19, 51, 117, 198, 253, 318, 252, 190, 262, 222, 187, 148, 114, 84, 89],
+    "Noviembre 2025": [59, 48, 40, 32, 18, 10, 14, 6, 8, 16, 18, 106, 190, 267, 385, 263, 191, 190, 210, 158, 114, 92, 83, 77],
+    "Diciembre 2025": [50, 35, 33, 22, 15, 9, 3, 5, 3, 14, 34, 76, 133, 184, 217, 181, 142, 142, 150, 122, 96, 86, 72, 61],
+    "Enero 2026": [60, 45, 38, 23, 20, 12, 11, 8, 6, 9, 28, 106, 192, 252, 245, 226, 191, 213, 212, 150, 150, 118, 95, 75],
+    "Febrero 2026": [51, 43, 40, 29, 20, 14, 8, 5, 8, 13, 43, 126, 224, 263, 327, 252, 195, 238, 236, 182, 171, 99, 100, 87],
+    "Marzo 2026": [92, 74, 44, 30, 26, 7, 4, 5, 4, 14, 50, 230, 415, 466, 517, 413, 307, 359, 366, 341, 254, 150, 151, 97],
+    "Abril 2026": [94, 55, 59, 39, 24, 9, 7, 10, 6, 23, 59, 257, 440, 553, 537, 471, 350, 433, 452, 378, 299, 178, 141, 112],
+    "Mayo 2026": [99, 63, 70, 44, 23, 21, 9, 3, 9, 27, 51, 253, 421, 535, 573, 467, 339, 410, 470, 379, 262, 172, 176, 123],
+    "Junio 2026": [80, 69, 65, 37, 20, 10, 10, 5, 5, 20, 68, 261, 492, 587, 558, 523, 362, 402, 493, 414, 292, 207, 180, 139],
     "Julio 2026": [70, 60, 45, 41, 15, 12, 12, 6, 8, 21, 42, 192, 374, 451, 485, 401, 311, 319, 329, 261, 213, 148, 117, 110],
     "Agosto 2026": [91, 66, 46, 33, 26, 12, 10, 6, 7, 14, 44, 211, 414, 447, 499, 367, 279, 363, 360, 312, 243, 157, 129, 111],
     "Septiembre 2026": [70, 63, 51, 33, 16, 9, 4, 3, 3, 15, 45, 228, 406, 474, 473, 404, 250, 307, 373, 318, 223, 144, 112, 98]
 }
 dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
 porcentajes_semanales = [0.21, 0.22, 0.22, 0.20, 0.13, 0.015, 0.005]
-# Conteos reales por día de la semana (sesiones brutas). Meses sin dato real usan porcentajes_semanales.
+# Conteos reales por día de la semana (sesiones brutas, UTC, lunes primero).
 dias_semana_reales = {
+    "Octubre 2025": [380, 410, 599, 732, 480, 115, 92],
+    "Noviembre 2025": [528, 482, 419, 451, 474, 132, 109],
+    "Diciembre 2025": [352, 433, 302, 306, 346, 90, 56],
+    "Enero 2026": [456, 444, 412, 459, 510, 141, 63],
+    "Febrero 2026": [361, 439, 560, 591, 603, 123, 97],
+    "Marzo 2026": [736, 863, 837, 852, 841, 151, 136],
+    "Abril 2026": [946, 918, 1127, 966, 734, 166, 129],
+    "Mayo 2026": [799, 975, 909, 953, 981, 216, 166],
+    "Junio 2026": [878, 1255, 1059, 928, 948, 151, 80],
+    "Julio 2026": [720, 730, 836, 755, 749, 160, 93],
     "Agosto 2026": [852, 833, 777, 741, 775, 163, 106],
     "Septiembre 2026": [684, 906, 935, 705, 675, 138, 79]
 }
@@ -137,74 +147,74 @@ insights_mes = {
     "Octubre 2025": {
         "contexto": "Mes de mayor actividad del trimestre base, marcando el inicio del período de alta demanda previo al cierre de año.",
         "foco": "Consultas de rutina sobre el uso del chatbot e interacciones bajo niveles normales de operación corporativa.",
-        "keywords": {"Convenio": 100, "Sesiones": 85, "Consulta": 60},
-        "sistemas": {"Convenio / Padrón": 50, "SIFERE / DDJJ": 30, "SIRCREB": 12, "SIRCUPA": 8, "SIRCIP": 0}
+        "keywords": {"Baja": 85, "DDJJ": 68, "Convenio": 67, "Sircreb": 53, "Ingresos": 49, "Retenciones": 48, "Alta": 45},
+        "sistemas": {"Otros": 12, "Convenio / Padrón": 20, "SIFERE / DDJJ": 24, "SIRCAR": 6, "SIRCREB": 20, "SIRCUPA": 18}
     },
     "Noviembre 2025": {
-        "contexto": "Ligera disminución en el volumen bruto de consultas respecto a octubre, manteniendo una tasa de conversión plana del 21%.",
+        "contexto": "Ligera disminución en el volumen bruto de consultas respecto a octubre, con una tasa de conversión de 24,82% (se incrementa frente a octubre).",
         "foco": "Consultas habituales de mantenimiento de padrón previas al cierre de ejercicio fiscal.",
-        "keywords": {"Convenio": 100, "Baja": 80, "Alta": 75},
-        "sistemas": {"Convenio / Padrón": 48, "SIFERE / DDJJ": 32, "SIRCREB": 12, "SIRCUPA": 8, "SIRCIP": 0}
+        "keywords": {"DDJJ": 81, "Convenio": 77, "Baja": 74, "Sifere": 60, "Pago": 55, "Alta": 55, "Retenciones": 55},
+        "sistemas": {"Otros": 11, "Convenio / Padrón": 14, "SIFERE / DDJJ": 36, "SIRCAR": 7, "SIRCREB": 16, "SIRCUPA": 16}
     },
     "Diciembre 2025": {
         "contexto": "Desaceleración estacional típica generalizada (-27% de tráfico bruto) provocada por los recesos vacacionales y las fiestas de fin de año.",
         "foco": "Urgencias administrativas de cierre fiscal. Reorganización empresarial (altas/bajas) y fuerte irrupción de consultas críticas sobre el sistema SIRCUPA.",
-        "keywords": {"Baja": 59, "DDJJ": 52, "Alta": 51, "Convenio": 48, "Retenciones": 41, "Sistema": 34, "Ingresos": 32, "SIRCREB": 31},
-        "sistemas": {"Convenio / Padrón": 30, "SIFERE / DDJJ": 25, "SIRCREB": 20, "SIRCUPA": 25, "SIRCIP": 0}
+        "keywords": {"Baja": 59, "DDJJ": 53, "Alta": 51, "Convenio": 48, "Retenciones": 41, "Pago": 37, "Ingresos": 32},
+        "sistemas": {"Otros": 14, "Convenio / Padrón": 17, "SIFERE / DDJJ": 28, "SIRCAR": 9, "SIRCREB": 20, "SIRCUPA": 12}
     },
     "Enero 2026": {
         "contexto": "Recuperación operativa post-receso de Año Nuevo (+31% de crecimiento bruto), marcando el fin de la estacionalidad de las fiestas.",
         "foco": "Reorganización fiscal típica de inicio de ciclo anual. Dominio absoluto de los trámites de alta y baja en el Convenio Multilateral y reclamos por retenciones indebidas (SIRCREB/SIRCUPA).",
-        "keywords": {"Alta": 60, "Jurisdicción": 55, "Padrón": 48, "Sistema": 45, "Baja": 40, "Convenio": 38, "Retenciones": 35},
-        "sistemas": {"Convenio / Padrón": 45, "SIFERE / DDJJ": 20, "SIRCREB": 20, "SIRCUPA": 15, "SIRCIP": 0}
+        "keywords": {"Convenio": 103, "Baja": 99, "Multilateral": 72, "DDJJ": 68, "Alta": 62, "Ingresos": 58, "Brutos": 53},
+        "sistemas": {"Otros": 13, "Convenio / Padrón": 22, "SIFERE / DDJJ": 29, "SIRCAR": 9, "SIRCREB": 17, "SIRCUPA": 10}
     },
     "Febrero 2026": {
         "contexto": "Reactivación plena del período comercial y administrativo, alcanzando el máximo volumen del cuatrimestre inicial (+11,6% de incremento respecto a enero).",
         "foco": "Foco crítico en el cierre del ejercicio fiscal: presentación de la DDJJ anual (CM03) en SIFERE Web. Se detectaron fuertes señales de alerta e inconvenientes técnicos externos (la palabra 'error' escaló al 4° lugar general).",
-        "keywords": {"DDJJ": 100, "Baja": 87, "Convenio": 82, "Ingresos": 75, "Error": 68, "Actividad": 60, "Alta": 45, "Sistema": 40},
-        "sistemas": {"Convenio / Padrón": 25, "SIFERE / DDJJ": 55, "SIRCREB": 12, "SIRCUPA": 8, "SIRCIP": 0}
+        "keywords": {"DDJJ": 140, "Baja": 93, "Convenio": 87, "Error": 83, "Ingresos": 67, "Actividad": 65, "Presentar": 64},
+        "sistemas": {"Otros": 13, "Convenio / Padrón": 16, "SIFERE / DDJJ": 40, "SIRCAR": 7, "SIRCIP": 2, "SIRCREB": 14, "SIRCUPA": 8}
     },
     "Marzo 2026": {
         "contexto": "Explosión masiva de demanda impulsada por el calendario de vencimientos generales del Convenio Multilateral.",
         "foco": "Consultas complejas sobre reglas de atribución, jurisdicciones de alta y regímenes de recaudación. Disminución drástica de problemas de estabilidad técnica en sistemas.",
-        "keywords": {"Convenio": 100, "DDJJ": 88, "Baja": 78, "Multilateral": 72, "Alta": 65, "Ingresos": 58},
-        "sistemas": {"Convenio / Padrón": 65, "SIFERE / DDJJ": 20, "SIRCREB": 10, "SIRCUPA": 5, "SIRCIP": 0}
+        "keywords": {"Convenio": 96, "DDJJ": 77, "Baja": 67, "Multilateral": 65, "Alta": 65, "Ingresos": 61, "Actividad": 57},
+        "sistemas": {"Otros": 15, "Convenio / Padrón": 17, "SIFERE / DDJJ": 30, "SIRCAR": 7, "SIRCIP": 5, "SIRCREB": 18, "SIRCUPA": 8}
     },
     "Abril 2026": {
         "contexto": "Nuevo pico histórico de tráfico bruto en el canal. Inicio de un período masivo de regularización de contribuyentes.",
         "foco": "Trámites de padrón con paridad exacta entre altas y bajas (68 menciones c/u). Alta demanda de consultas sobre gestión y validación de CUIT y acceso digital al portal corporativo.",
-        "keywords": {"Convenio": 100, "Alta": 94, "Baja": 94, "DDJJ": 82, "CUIT": 74, "Retenciones": 66},
-        "sistemas": {"Convenio / Padrón": 50, "SIFERE / DDJJ": 25, "SIRCREB": 15, "SIRCUPA": 10, "SIRCIP": 0}
+        "keywords": {"Convenio": 69, "Alta": 68, "Baja": 68, "DDJJ": 56, "Retenciones": 50, "Sircreb": 49, "Multilateral": 47},
+        "sistemas": {"Otros": 15, "Convenio / Padrón": 17, "SIFERE / DDJJ": 28, "SIRCAR": 7, "SIRCIP": 5, "SIRCREB": 20, "SIRCUPA": 8}
     },
     "Mayo 2026": {
         "contexto": "Estabilización y consolidación de la demanda en la banda más alta registrada del año (~5.000 sesiones totales).",
         "foco": "Persistencia de dudas operativas en DDJJ e irrupción crítica del nuevo régimen local SIRCIP (tarjetas y medios de pago electrónicos), conviviendo directamente con las consultas de SIRCREB.",
-        "keywords": {"DDJJ": 100, "Baja": 95, "Convenio": 90, "Alta": 85, "Sircip": 75, "Sircreb": 68},
-        "sistemas": {"Convenio / Padrón": 30, "SIFERE / DDJJ": 30, "SIRCREB": 15, "SIRCUPA": 10, "SIRCIP": 15}
+        "keywords": {"DDJJ": 70, "Baja": 65, "Convenio": 65, "Alta": 62, "Sircip": 53, "Sircreb": 51, "Ingresos": 50},
+        "sistemas": {"Otros": 11, "Convenio / Padrón": 14, "SIFERE / DDJJ": 30, "SIRCAR": 7, "SIRCIP": 11, "SIRCREB": 19, "SIRCUPA": 8}
     },
     "Junio 2026": {
         "contexto": "Cierre del primer semestre consolidando el pico histórico de demanda del canal con casi 5.300 sesiones brutas ingresadas.",
         "foco": "Urgencia de liquidación de obligaciones anuales combinada con los trámites de rutina fiscal, dominando las consultas sobre DDJJ, ingresos y presentaciones.",
-        "keywords": {"DDJJ": 100, "Baja": 85, "Convenio": 75, "Ingresos": 65, "Retenciones": 50},
-        "sistemas": {"Convenio / Padrón": 35, "SIFERE / DDJJ": 45, "SIRCREB": 15, "SIRCUPA": 3, "SIRCIP": 2}
+        "keywords": {"DDJJ": 73, "Baja": 61, "Convenio": 59, "Ingresos": 55, "Retenciones": 53, "Alta": 49, "Multilateral": 47},
+        "sistemas": {"Otros": 11, "Convenio / Padrón": 15, "SIFERE / DDJJ": 31, "SIRCAR": 6, "SIRCIP": 10, "SIRCREB": 17, "SIRCUPA": 10}
     },
     "Julio 2026": {
         "contexto": "Disminución del tráfico tras los picos estacionales de vencimientos. Recientes interacciones del sistema muestran pruebas de QA activas para el SUMA BOT.",
         "foco": "Identificación de CUIT y validación de registros dentro del padrón federal, observándose un peso relativo alto en consultas sobre retenciones bancarias.",
-        "keywords": {"Sifere": 100, "Sircreb": 85, "Padrón": 70, "CUIT": 55},
-        "sistemas": {"Convenio / Padrón": 19, "SIFERE / DDJJ": 36, "SIRCREB": 25, "SIRCUPA": 17, "SIRCIP": 3}
+        "keywords": {"Baja": 72, "Alta": 58, "DDJJ": 55, "Convenio": 47, "Sircreb": 46, "Pago": 38, "Multilateral": 34},
+        "sistemas": {"Otros": 13, "Convenio / Padrón": 15, "SIFERE / DDJJ": 29, "SIRCAR": 6, "SIRCIP": 3, "SIRCREB": 20, "SIRCUPA": 14}
     },
     "Agosto 2026": {
         "contexto": "Recuperación leve del volumen bruto post-ferias de julio (4.247 sesiones). Se logró la tasa de contención automatizada más eficiente del semestre, alcanzando el 76,57%.",
         "foco": "Prevalencia equilibrada entre los trámites de DDJJ en SIFERE y retenciones de SIRCREB, acompañados de un volumen masivo de gestión de Padrón (altas y bajas de contribuyentes).",
-        "keywords": {"Baja": 100, "Convenio": 90, "DDJJ": 85, "Alta": 80, "Sircreb": 75, "Retenciones": 70},
-        "sistemas": {"Convenio / Padrón": 24, "SIFERE / DDJJ": 31, "SIRCREB": 28, "SIRCUPA": 10, "SIRCIP": 7}
+        "keywords": {"Baja": 64, "Convenio": 53, "Alta": 48, "DDJJ": 47, "Sircreb": 43, "Retenciones": 39, "Multilateral": 37},
+        "sistemas": {"Otros": 13, "Convenio / Padrón": 19, "SIFERE / DDJJ": 25, "SIRCAR": 8, "SIRCIP": 5, "SIRCREB": 22, "SIRCUPA": 8}
     },
     "Septiembre 2026": {
         "contexto": "Caída leve del tráfico bruto (4.122 sesiones, -2,9% frente a agosto), con la demanda concentrada de lunes a viernes. Conversión a consulta estable (23,63%) y contención automatizada del 76,37%.",
         "foco": "Trámites de padrón (baja, convenio, alta) y consultas sobre retenciones bancarias de SIRCREB, con presencia constante de DDJJ y Convenio Multilateral. SIRCAR aparece como sistema demandado (9%).",
         "keywords": {"Baja": 68, "Convenio": 54, "Alta": 50, "Sircreb": 41, "DDJJ": 38, "Multilateral": 37, "Retenciones": 33},
-        "sistemas": {"Convenio / Padrón": 16, "SIFERE / DDJJ": 23, "SIRCREB": 24, "SIRCUPA": 7, "SIRCIP": 7, "SIRCAR": 9, "Otros": 14}
+        "sistemas": {"Otros": 14, "Convenio / Padrón": 16, "SIFERE / DDJJ": 23, "SIRCAR": 9, "SIRCIP": 7, "SIRCREB": 24, "SIRCUPA": 7}
     }
 }
 
