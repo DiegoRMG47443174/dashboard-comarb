@@ -3,6 +3,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import os
+import plotly.io as pio
+
+# Tipografía institucional para todos los gráficos Plotly
+_tpl = pio.templates["plotly_white"]
+_tpl.layout.font.family = "Helvetica Neue, Helvetica, Arial, sans-serif"
+_tpl.layout.font.color = "#2D3748"
 
 # Configuración de la página
 st.set_page_config(
@@ -226,7 +232,7 @@ ruta_logo = os.path.join(ruta_actual, "comarb_logo.png")
 col_logo, col_titulo = st.columns([1, 5])
 with col_logo:
     try:
-        st.image(ruta_logo, use_container_width=True)
+        st.image(ruta_logo, width="stretch")
     except Exception:
         st.error("Logo no encontrado.")
 
@@ -241,13 +247,22 @@ st.markdown("---")
 
 # Paleta ca.gob.ar Oficial definitiva
 colores_sistemas = ["#039ee2", "#0022c3", "#1E3A8A", "#60A5FA", "#93C5FD"]
+color_sistema_map = {
+    "SIRCREB": "#0022c3",
+    "SIFERE / DDJJ": "#039ee2",
+    "Convenio / Padrón": "#1E3A8A",
+    "SIRCAR": "#60A5FA",
+    "SIRCIP": "#93C5FD",
+    "SIRCUPA": "#ff7870",
+    "Otros": "#A0AEC0",
+}
 color_barra_principal = "#039ee2"
 color_linea_conversion = "#ff7870"
 color_linea_rebote = "#0022c3"
 
 # --- LÓGICA VISTA A: TOTAL HISTÓRICO CONSOLIDADO ---
 if periodo_seleccionado == "Total Histórico Consolidado":
-    st.subheader("📈 Diagnóstico Macro y Evolución de demanda")
+    st.subheader("Diagnóstico Macro y Evolución de demanda")
     
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Pico Máximo Registrado", f"{df['Sesiones_Brutas'].max():.0f} Sesiones")
@@ -264,7 +279,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
         yaxis2=dict(title=dict(text="Tasa de Conversión (%)", font=dict(color="#2D3748")), overlaying="y", side="right", tickfont=dict(color="#2D3748")),
         template="plotly_white", height=400, legend=dict(x=0.01, y=0.99), font=dict(color="#2D3748")
     )
-    st.plotly_chart(fig_hist, use_container_width=True)
+    st.plotly_chart(fig_hist, width="stretch")
     
     col_izq_hist, col_der_hist = st.columns(2)
     with col_izq_hist:
@@ -273,7 +288,7 @@ if periodo_seleccionado == "Total Histórico Consolidado":
         fig_rebote = px.line(df_rebote, x="Mes", y="Tasa_Rebote", text="Tasa_Rebote", title="Evolución del Rebote", template="plotly_white", markers=True)
         fig_rebote.update_traces(line_color=color_linea_rebote, line_width=3, textposition="top center")
         fig_rebote.update_layout(height=350)
-        st.plotly_chart(fig_rebote, use_container_width=True)
+        st.plotly_chart(fig_rebote, width="stretch")
         
     with col_der_hist:
         st.subheader("3. Share de Demandas por Sistema")
@@ -282,16 +297,17 @@ if periodo_seleccionado == "Total Histórico Consolidado":
             for sis, val in insights_mes[m]["sistemas"].items():
                 sistemas_global[sis] = sistemas_global.get(sis, 0) + val
         df_sis_g = pd.DataFrame(list(sistemas_global.items()), columns=["Sistema", "Volumen"])
-        fig_pie_g = px.pie(df_sis_g, values="Volumen", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
-        fig_pie_g.update_layout(height=350, legend=dict(orientation="h", y=-0.1))
-        st.plotly_chart(fig_pie_g, use_container_width=True)
+        fig_pie_g = px.pie(df_sis_g, values="Volumen", names="Sistema", hole=0.4, template="plotly_white", color="Sistema", color_discrete_map=color_sistema_map)
+        fig_pie_g.update_traces(textinfo="label+percent", textposition="outside")
+        fig_pie_g.update_layout(height=350, showlegend=False, margin=dict(l=10, r=10, t=30, b=30))
+        st.plotly_chart(fig_pie_g, width="stretch")
         
     vector_horas_total = [sum(perfiles_horarios[m][i] for m in perfiles_horarios) for i in range(24)]
     vector_dias_total = [int(df["Sesiones_Brutas"].sum() * p) for p in porcentajes_semanales]
 
 # --- LÓGICA VISTA B: CORTE MENSUAL ---
 else:
-    st.subheader(f"🔍 Diagnóstico Avanzado — Período: {periodo_seleccionado}")
+    st.subheader(f"Diagnóstico Avanzado — Período: {periodo_seleccionado}")
     datos_mes = df[df["Mes"] == periodo_seleccionado].iloc[0]
     info = insights_mes[periodo_seleccionado]
     
@@ -305,22 +321,23 @@ else:
     
     col_textos, col_g_kw, col_g_pie = st.columns([2, 2, 2])
     with col_textos:
-        st.markdown("### 📌 Contexto de consulta")
+        st.markdown("### Contexto de consulta")
         st.info(info["contexto"])
-        st.markdown("### 🔍 Foco de Demanda")
+        st.markdown("### Foco de Demanda")
         st.warning(info["foco"])
     with col_g_kw:
-        st.markdown("### 📊 Palabras Dominantes")
+        st.markdown("### Palabras Dominantes")
         df_kw = pd.DataFrame(list(info["keywords"].items()), columns=["Palabra", "Menciones"]).sort_values(by="Menciones", ascending=True)
         fig_kw = px.bar(df_kw, x="Menciones", y="Palabra", orientation="h", text="Menciones", template="plotly_white", color_discrete_sequence=[color_barra_principal])
         fig_kw.update_layout(showlegend=False, height=300, margin=dict(l=10, r=30, t=10, b=10))
-        st.plotly_chart(fig_kw, use_container_width=True)
+        st.plotly_chart(fig_kw, width="stretch")
     with col_g_pie:
-        st.markdown("### 🍩 Por Sistema")
+        st.markdown("### Por Sistema")
         df_sis_m = pd.DataFrame(list(info["sistemas"].items()), columns=["Sistema", "Dist"]).query("Dist > 0")
-        fig_pie_m = px.pie(df_sis_m, values="Dist", names="Sistema", hole=0.4, template="plotly_white", color_discrete_sequence=colores_sistemas)
-        fig_pie_m.update_layout(height=300, legend=dict(orientation="h", y=-0.1))
-        st.plotly_chart(fig_pie_m, use_container_width=True)
+        fig_pie_m = px.pie(df_sis_m, values="Dist", names="Sistema", hole=0.4, template="plotly_white", color="Sistema", color_discrete_map=color_sistema_map)
+        fig_pie_m.update_traces(textinfo="label+percent", textposition="outside")
+        fig_pie_m.update_layout(height=300, showlegend=False, margin=dict(l=10, r=10, t=30, b=30))
+        st.plotly_chart(fig_pie_m, width="stretch")
         
     vector_horas_total = perfiles_horarios[periodo_seleccionado]
     if periodo_seleccionado in dias_semana_reales:
@@ -329,18 +346,18 @@ else:
         vector_dias_total = [int(datos_mes["Sesiones_Brutas"] * p) for p in porcentajes_semanales]
 
 # --- 6. ANÁLISIS TEMPORAL ---
-st.markdown("### 📅 Análisis de Comportamiento y Hábitos del Contribuyente")
+st.markdown("### Análisis de Comportamiento y Hábitos del Contribuyente")
 col_graf1, col_graf2 = st.columns(2)
 with col_graf1:
     df_horas = pd.DataFrame({"Hora": horas_eje, "Sesiones": vector_horas_total})
-    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria ({periodo_seleccionado})", template="plotly_white")
+    fig_horas = px.area(df_horas, x="Hora", y="Sesiones", title=f"Distribución Horaria en UTC ({periodo_seleccionado})", template="plotly_white")
     fig_horas.update_traces(line_color=color_barra_principal, fillcolor="rgba(3, 158, 226, 0.15)")
-    st.plotly_chart(fig_horas, use_container_width=True)
+    st.plotly_chart(fig_horas, width="stretch")
 with col_graf2:
     df_dias = pd.DataFrame({"Día": dias_semana, "Sesiones": vector_dias_total})
     fig_dias = px.bar(df_dias, x="Día", y="Sesiones", title=f"Distribución Semanal ({periodo_seleccionado})", text="Sesiones", template="plotly_white")
-    fig_dias.update_traces(marker_color="#10B981", textposition="outside")
-    st.plotly_chart(fig_dias, use_container_width=True)
+    fig_dias.update_traces(marker_color="#039ee2", textposition="outside")
+    st.plotly_chart(fig_dias, width="stretch")
 
 st.markdown("---")
 st.caption("Dashboard de Monitoreo desarrollado bajo lineamientos institucionales ca.gob.ar.")
